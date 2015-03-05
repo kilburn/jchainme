@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="jar" name="jchainme">
+    <property name="jarname" value="jchainme" />
+
     <target name="clean">
         <delete dir="bin"/>
         <delete dir="dist"/>
@@ -16,8 +18,6 @@
     </target>
 
     <target name="jar" depends="clean,compile">
-        <property name="jarname" value="jchainme" />
-
         <mkdir dir="dist"/>
 
         <path id="build-classpath">
@@ -37,5 +37,11 @@
             </manifest>
             <fileset dir="bin"/>
         </jar>
+    </target>
+
+    <target name="run">
+        <java jar="dist/${jarname}.jar" fork="true">
+            <arg line="examples/5000participants_2500goods.fg -ff -i 1000 -t -s" />
+        </java>
     </target>
 </project>

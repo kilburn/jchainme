@@ -43,6 +43,7 @@ import es.csic.iiia.chainme.communication.SequentialCommunicationAdapter;
 import es.csic.iiia.chainme.parsers.LibDaiParser;
 import es.csic.iiia.chainme.parsers.ParserException;
 import es.csic.iiia.chainme.parsers.XMLParser;
+import es.csic.iiia.chainme.runner.ThreadedRunner;
 import es.csic.iiia.maxsum.Factor;
 import gnu.getopt.Getopt;
 
@@ -63,6 +64,7 @@ public class Solver {
     "Options\n" +
     "   -s[r]       Sequential message update. Optional parameter 'r' for random order.\n" +
     "   -p          Parallel message update.\n" +
+    "   -t          Threaded execution.\n" +
     "   -d value    Damp messages by a value.\n" +
     "   -i value    Set the maximum number of iterations.\n" +
     "   -h          Display this message.";
@@ -71,7 +73,7 @@ public class Solver {
      * @param args
      */
     public static void main(String[] args) {
-        Getopt g = new Getopt("jchainme", args, "ps::d:i:f:h");
+        Getopt g = new Getopt("jchainme", args, "tps::d:i:f:h");
         Configuration conf = new Configuration();
 
         // Parse command line options.
@@ -91,6 +93,10 @@ public class Solver {
 
             case 'p':
                 conf.com = new ParallelCommunicationAdapter();
+                break;
+
+            case 't':
+                conf.runner = new ThreadedRunner();
                 break;
 
             case 'i':

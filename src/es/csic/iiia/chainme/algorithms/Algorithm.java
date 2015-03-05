@@ -46,6 +46,7 @@ import es.csic.iiia.chainme.Configuration;
 import es.csic.iiia.chainme.communication.AbstractCommunicationAdapter;
 import es.csic.iiia.chainme.communication.ParallelCommunicationAdapter;
 import es.csic.iiia.chainme.factors.ParticipantFactor;
+import es.csic.iiia.chainme.runner.Runner;
 import es.csic.iiia.maxsum.Factor;
 import es.csic.iiia.maxsum.MaxOperator;
 
@@ -61,6 +62,7 @@ public abstract class Algorithm {
     protected List<ParticipantFactor> vars;
     protected Map<Factor, Boolean> solution;
     private int iters;
+    private Runner runner;
 
     public abstract void pruneAllocation();
 
@@ -74,21 +76,22 @@ public abstract class Algorithm {
         extractVarsFromFactors();
         com = conf.com;
         op = conf.op;
+        runner = conf.runner;
 
         initialize();
     }
 
     public void solve() {
+        runner.initialize(factors);
+
         for (iters = 0; iters < conf.maxIters
                 && com.getMaxDiff() > conf.convergenceTolerance; iters++) {
             com.setMaxDiff(Double.NEGATIVE_INFINITY);
 
-            for (Factor factor : factors) {
-                factor.run();
-            }
-
+            runner.run();
             com.tick();
         }
+        runner.stop();
 
         calcSolution();
     }

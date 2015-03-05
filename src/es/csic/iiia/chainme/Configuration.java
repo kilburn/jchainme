@@ -3,6 +3,9 @@ package es.csic.iiia.chainme;
 import es.csic.iiia.chainme.communication.AbstractCommunicationAdapter;
 import es.csic.iiia.chainme.communication.ParallelCommunicationAdapter;
 import es.csic.iiia.chainme.parsers.ProblemParser;
+import es.csic.iiia.chainme.runner.Runner;
+import es.csic.iiia.chainme.runner.SequentialRunner;
+import es.csic.iiia.chainme.runner.ThreadedRunner;
 import es.csic.iiia.maxsum.MaxOperator;
 import es.csic.iiia.maxsum.Maximize;
 
@@ -19,6 +22,7 @@ public class Configuration {
     public MaxOperator op;
     public AbstractCommunicationAdapter com;
     public ProblemParser parser;
+    public Runner runner;
 
     public Configuration() {
         maxIters = DEFAULT_MAX_ITER;
@@ -27,5 +31,6 @@ public class Configuration {
         shuffleFactors = DEFAULT_SHUFFLE_FACTORS;
         op = new Maximize();
         com = new ParallelCommunicationAdapter();
+        runner = new SequentialRunner();
     }
 }

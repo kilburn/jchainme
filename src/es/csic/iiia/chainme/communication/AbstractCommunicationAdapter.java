@@ -45,7 +45,7 @@ import es.csic.iiia.maxsum.Factor;
 * @author Toni Penya-Alba <tonipenya@iiia.csic.es>
 */
 public abstract class AbstractCommunicationAdapter<T extends Factor<Factor>> implements CommunicationAdapter<T> {
-    private double dampingFactor;;
+    private double dampingFactor;
     private double maxDiff = Double.POSITIVE_INFINITY;
 
 
@@ -54,13 +54,16 @@ public abstract class AbstractCommunicationAdapter<T extends Factor<Factor>> imp
      */
     public abstract void doSend(double message, T sender, T recipient);
 
+    @Override
     public void send(double message, T sender, T recipient) {
+        final double oldMsg = recipient.getMessage(sender);
+
         if (sender instanceof MediatorFactor) {
-            message = recipient.getMessage(sender) * dampingFactor
+            message = oldMsg * dampingFactor
                     + message * (1 - dampingFactor);
         }
 
-        double diff = Math.abs(recipient.getMessage(sender) - message);
+        final double diff = Math.abs(oldMsg - message);
         maxDiff = Math.max(diff, maxDiff);
 
         doSend(message, sender, recipient);
